@@ -8,7 +8,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/arthurk/argocd-example-install.git
+    repoURL: https://github.com/rzabcio/local-minikube-gitops.git
     path: charts/root-app/
     targetRevision: HEAD
   destination:
