@@ -18,6 +18,12 @@ spec:
           repository: sonatype/nexus3
           tag: 3.68.1
           pullPolicy: IfNotPresent
+        nexus:
+          docker:
+            enabled: true
+            registries:
+            - host: docker.{{.Values.domain}}
+              port: 5000
         env:
           - name: INSTALL4J_ADD_VM_PARAMS
             value: |-
