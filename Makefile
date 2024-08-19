@@ -13,12 +13,15 @@ ifneq ($(cluster_status),0)
 	@minikube addons enable ingress
 endif
 
-install-requirements:
+requirements:
 	@helm repo add argo-cd https://argoproj.github.io/argo-helm
 	@helm dependency build charts/argo-cd
 
 update:
 	@helm upgrade --install argo-cd -n argo-cd --create-namespace charts/argo-cd
+
+root-app:
+	@helm template charts/root-app | kubectl apply -f -
 
 password:
 	@kubectl -n argo-cd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
