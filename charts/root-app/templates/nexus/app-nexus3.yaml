@@ -1,0 +1,56 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nexus3
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://sonatype.github.io/helm3-charts/
+    targetRevision: 64.2.0
+    chart: nexus-repository-manager
+    helm:
+      values: |
+        image:
+          repository: sonatype/nexus3
+          tag: 3.68.1
+          pullPolicy: IfNotPresent
+        env:
+          - name: INSTALL4J_ADD_VM_PARAMS
+            value: |-
+              -Xms1G -Xmx1G
+              -XX:MaxDirectMemorySize=1G
+              -XX:+UnlockExperimentalVMOptions
+              -XX:+UseCGroupMemoryLimitForHeap
+              -Djava.util.prefs.userRoot=/nexus-data/javaprefs
+        nexusPort: 8081
+        ingress:
+          enabled: true
+          ingressClassName: {{ .Values.ingressClassName }}
+          hostPath: "/"
+          hostRepo: nexus.{{ .Values.domain }}
+          # tls:
+          #   - secretName: nexus-tls-secret
+          #     hosts:
+          #     - nexus.{{ .Values.domain }}
+        service:
+          name: nexus
+          enabled: true
+          labels: {}
+          annotations: {}
+          type: ClusterIP
+        persistence:
+          enabled: true
+          accessMode: ReadWriteOnce
+          storageSize: 5Gi
+
+  destination:
+    namespace: nexus
+    server: 'https://kubernetes.default.svc'
+  syncPolicy:
+    automated:
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

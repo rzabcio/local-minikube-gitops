@@ -1,0 +1,3 @@
+---
+domain: arkhamasylum.xyz
+ingressClassname: nginx
