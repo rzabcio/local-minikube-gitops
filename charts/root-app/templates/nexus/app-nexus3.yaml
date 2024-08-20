@@ -14,6 +14,7 @@ spec:
     chart: nexus-repository-manager
     helm:
       values: |
+        replicaCount: 0
         image:
           repository: sonatype/nexus3
           tag: 3.68.1
@@ -52,6 +53,6 @@ spec:
     server: 'https://kubernetes.default.svc'
   syncPolicy:
     automated:
-      selfHeal: false
+      selfHeal: true
     syncOptions:
       - CreateNamespace=true
