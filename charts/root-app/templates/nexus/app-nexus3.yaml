@@ -52,6 +52,6 @@ spec:
     server: 'https://kubernetes.default.svc'
   syncPolicy:
     automated:
-      selfHeal: true
+      selfHeal: false
     syncOptions:
       - CreateNamespace=true
